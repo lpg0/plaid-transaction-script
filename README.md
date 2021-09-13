@@ -1,5 +1,5 @@
 # 🏦 plaid-transaction-script
-### Introduction
+## Introduction
 
 There are a only few platforms that offer to automate bank transaction data into a Google Spreadsheet, however everything I could find required payment. Using the Plaid API and Google App Scripts this process is entirely free. 
 
