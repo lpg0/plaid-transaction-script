@@ -7,13 +7,13 @@ The code for this project can be found on [GitHub](https://github.com/lpg0/plaid
 
 Please note that this project is barebones and it could be extended to synchronously update data and format it (see concluding section). 
 
-### Setup
+## Setup
 
 You will need a [Plaid account](https://dashboard.plaid.com/signup). After signing up, go to your [development dashboard](https://dashboard.plaid.com/overview)[^note] and click **Build In Development**. You have 5 live bank account to use, which is plenty for a personal finance project. Here you will have access to the *client_id* API key and the *development_secret*. Keep this tab open since both will be used in the next section.
 
 [^note]: Please note that this project may be first completed in sandbox mode to limit the chance of an accidental data leak, however I am only writing this for development.
 
-### Access Token
+## Access Token
 
 The next step is to generate an access token. Via the Plaid founder's [recommendation](https://stackoverflow.com/a/49868230) (thanks Michael!) we will generate an access token by running the Plaid quickstart application locally where we can authenticate our bank. The quickstart project can be found [here](https://github.com/plaid/quickstart). The instructions are described in the README.md file, however due to some discrepancies I will walk through the process on Windows (Linux would be similar). 
 
@@ -46,7 +46,7 @@ $ npm start
 
 A browser window will open at http://localhost:3000/. From the running application you can authenticate your bank with your Plaid account via a pop up window. The following dashboard will provide an *item_id* and *access_token*. You can also test different http request from the application. Leave this tab open to reference the *access_token* in the next section.
 
-### Transaction Scripting
+## Transaction Scripting
 
 In this section we will create a script that will import transaction data for one month into a Google Sheet. 
 
@@ -227,7 +227,7 @@ function myFunction() {
 
 Run the script a check that the spreadsheet is populated properly.
 
-### Conclusion
+## Conclusion
 
 At this point the data pipeline from your bank to spreadsheet should be complete. 
 
