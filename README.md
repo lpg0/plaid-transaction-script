@@ -56,7 +56,7 @@ Give the new script project a title (such as "Transactions Script").
 
 In the function *myFunction()* we will need to use the *UrlFetchApp.fetch* function provided to use by the App Script APIs. The following function creates a simple POST request to recieve the JSON transaction data for the past month. Update the *start_date* and *end_date* accordingly (we will change this later).
 
-```myFunction()
+```js
 function myFunction() {
   var data = {
     "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -83,7 +83,7 @@ Run the script and fix any errors before proceeding. The transactions should now
 
 The next step is to automate the *start_date* and *end_date*. The following two functions do this in a rather brute force way, but get the job done.
 
-```getStartDate()
+```js
 function getStartDate(){
   const d = new Date();
   var yyyy = String(d.getFullYear());
@@ -115,7 +115,7 @@ function getStartDate(){
 }
 ```
 
-```getEndDate()
+```js
 function getEndDate(){
   const d = new Date();
   var yyyy = String(d.getFullYear());
@@ -137,7 +137,7 @@ function getEndDate(){
 
 Update the function *myFunction()* as follows to automate the dates.
 
-```myFunction()
+```js
 function myFunction() {
   var data = {
     "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -162,7 +162,7 @@ function myFunction() {
 
 The final step is to export the JSON to the active spreadsheet. The JSON object that the <u>/transactions/get</u> HTTP response returns has the following basic structure. All of this information can be found in the [API docs](https://plaid.com/docs/api/products/#transactionsget).
 
-```response.JSON
+```json
 {
   "accounts": ,
   "item": ,
@@ -202,7 +202,7 @@ There is a lot here, but for this guide we will just use the date, amount, and n
 
 The following function takes a JSON object and appends the transaction date, amount, and name to the active spreadsheet (make sure its open). 
 
-```initializeSheet()
+```js
 function initializeSheet(response) {
   var sheet = SpreadsheetApp.getActiveSheet();
   const obj = JSON.parse(response.getContentText());
@@ -215,7 +215,7 @@ function initializeSheet(response) {
 
 Update the function *myFunction()* to account for the new feature.
 
-```myFunction()
+```js
 function myFunction() {
   var data = {
     "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
