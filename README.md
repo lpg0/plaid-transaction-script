@@ -19,7 +19,7 @@ The next step is to generate an access token. Via the Plaid founder's [recommend
 
 First, clone the repo and cd into quickstart and then the python folder.
 
-```
+```bash
 $ git clone https://github.com/plaid/quickstart
 $ cd quickstart
 ```
@@ -30,14 +30,14 @@ Then open the server.py file and replace the *"host=plaid.Environment.Sandbox"* 
 
 Next install the requirements and run the python server.
 
-```
+```bash
 $ pip install -r requirements.txt
 $ py start.sh
 ```
 
 In a new terminal cd in quickstart and then into the frontend folder. Run npm install and then start the application.
 
-```
+```bash
 $ cd quickstart
 $ cd frontend
 $ npm install
@@ -193,7 +193,7 @@ The final step is to export the JSON to the active spreadsheet. The JSON object 
       "transaction_id": ,
       "transaction_type": ,
       "unofficial_currency_code":
-    },...
+    }
   ]
 }
 ```
