@@ -19,7 +19,7 @@ The next step is to generate an access token. Via the Plaid founder's [recommend
 
 First, clone the repo and cd into quickstart and then the python folder.
 
-```
+```bash
 $ git clone https://github.com/plaid/quickstart
 $ cd quickstart
 ```
@@ -30,14 +30,14 @@ Then open the server.py file and replace the *"host=plaid.Environment.Sandbox"* 
 
 Next install the requirements and run the python server.
 
-```
+```bash
 $ pip install -r requirements.txt
 $ py start.sh
 ```
 
 In a new terminal cd in quickstart and then into the frontend folder. Run npm install and then start the application.
 
-```
+```bash
 $ cd quickstart
 $ cd frontend
 $ npm install
@@ -56,21 +56,23 @@ Give the new script project a title (such as "Transactions Script").
 
 In the function *myFunction()* we will need to use the *UrlFetchApp.fetch* function provided to use by the App Script APIs. The following function creates a simple POST request to recieve the JSON transaction data for the past month. Update the *start_date* and *end_date* accordingly (we will change this later).
 
-```myFunction()
+```js
 function myFunction() {
   var data = {
-	  "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "secret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "access_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "start_date": "2021-09-13",
-	  "end_date": "2021-08-13"
+    "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "secret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "access_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "start_date": "2021-09-13",
+    "end_date": "2021-08-13"
   };
+  
   var payload = JSON.stringify(data);
   var options = {
     "method" : "POST",
     "contentType" : "application/json",
     "payload" : payload
   };
+  
   var url = "https://development.plaid.com/transactions/get";
   var response = UrlFetchApp.fetch(url, options);
   console.log(response.getContentText());
@@ -81,47 +83,53 @@ Run the script and fix any errors before proceeding. The transactions should now
 
 The next step is to automate the *start_date* and *end_date*. The following two functions do this in a rather brute force way, but get the job done.
 
-```getStartDate()
+```js
 function getStartDate(){
   const d = new Date();
   var yyyy = String(d.getFullYear());
   var s_mm = d.getMonth();
+  
   if (s_mm == 0) {
     s_mm = "12"
-  }
-  else {
+  } else {
     s_mm = String(s_mm)
   }
+  
   if (s_mm.length == 1) {
     s_mm = "0" + s_mm
   }
+  
   var s_dd = d.getDate();
   if (s_dd == 29 || s_dd == 30 || s_dd == 31) {
     s_dd = "28"
-  }
-  else {
+  } else {
     s_dd = String(s_dd)
   }
+  
   if (s_dd.length == 1) {
     s_dd = "0" + s_dd
   }
+  
   var start_date = yyyy + "-" + s_mm + "-" + s_dd;
   return start_date;
 }
 ```
 
-```getEndDate()
+```js
 function getEndDate(){
   const d = new Date();
   var yyyy = String(d.getFullYear());
   var mm = String(d.getMonth() + 1);
+  
   if (mm.length == 1) {
     mm = "0" + mm
   }
+  
   var dd = String(d.getDate());
   if (dd.length == 1) {
     dd = "0" + dd
   }
+  
   var end_date = yyyy + "-" + mm + "-" + dd;
   return end_date;
 }
@@ -129,21 +137,23 @@ function getEndDate(){
 
 Update the function *myFunction()* as follows to automate the dates.
 
-```myFunction()
+```js
 function myFunction() {
   var data = {
-	  "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "secret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "access_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "start_date": getStartDate(),
-	  "end_date": getEndDate()
+    "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "secret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "access_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "start_date": getStartDate(),
+    "end_date": getEndDate()
   };
+  
   var payload = JSON.stringify(data);
   var options = {
     "method" : "POST",
     "contentType" : "application/json",
     "payload" : payload
   };
+  
   var url = "https://development.plaid.com/transactions/get";
   var response = UrlFetchApp.fetch(url, options);
   console.log(response.getContentText());
@@ -152,7 +162,7 @@ function myFunction() {
 
 The final step is to export the JSON to the active spreadsheet. The JSON object that the <u>/transactions/get</u> HTTP response returns has the following basic structure. All of this information can be found in the [API docs](https://plaid.com/docs/api/products/#transactionsget).
 
-```response.JSON
+```json
 {
   "accounts": ,
   "item": ,
@@ -183,7 +193,7 @@ The final step is to export the JSON to the active spreadsheet. The JSON object 
       "transaction_id": ,
       "transaction_type": ,
       "unofficial_currency_code":
-    },...
+    }
   ]
 }
 ```
@@ -192,10 +202,11 @@ There is a lot here, but for this guide we will just use the date, amount, and n
 
 The following function takes a JSON object and appends the transaction date, amount, and name to the active spreadsheet (make sure its open). 
 
-```initializeSheet()
+```js
 function initializeSheet(response) {
   var sheet = SpreadsheetApp.getActiveSheet();
   const obj = JSON.parse(response.getContentText());
+  
   for (let i = 0; i < obj.transactions.length; i++) {
     sheet.appendRow([obj.transactions[i].date,obj.transactions[i].amount,obj.transactions[i].name]);
   }
@@ -204,21 +215,23 @@ function initializeSheet(response) {
 
 Update the function *myFunction()* to account for the new feature.
 
-```myFunction()
+```js
 function myFunction() {
   var data = {
-	  "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "secret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "access_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-	  "start_date": getStartDate(),
-	  "end_date": getEndDate()
+    "client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "secret": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "access_token": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "start_date": getStartDate(),
+    "end_date": getEndDate()
   };
+  
   var payload = JSON.stringify(data);
   var options = {
     "method" : "POST",
     "contentType" : "application/json",
     "payload" : payload
   };
+  
   var url = "https://development.plaid.com/transactions/get";
   var response = UrlFetchApp.fetch(url, options);
   initializeSheet(response);
