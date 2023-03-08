@@ -5,7 +5,7 @@ There are a only few platforms that offer to automate bank transaction data into
 
 The code for this project can be found on [GitHub](https://github.com/lpg0/plaid-transaction-script).
 
-Please note that this project is barebones and it could be extended to synchronously update data and format it (see concluding section). 
+Please note that this project is simple and it could be extended to synchronously update data and format it (see concluding section). 
 
 ## Setup
 
